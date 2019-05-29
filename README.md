@@ -8,3 +8,19 @@ Spotted Leopards is a proof of concept for a cats-like library built using Dotty
  - provide a code base of significant size that can be used for learning and exploring Dotty
 
 In short, this project is an *experiment only* and will not in any way become a library that should be used for real work. This project is *NOT* a preview of a future Cats version. Rather, it provides a way to explore the design space of the Dotty language features without the constraints of source compatibility and cross-building expected of Cats proper.
+
+## Getting Started
+
+To get started, launch `sbt console` and run the following:
+
+```scala
+scala> import leopards._ // Import various types like Monad and OptionT
+
+scala> import implied leopards._ // Import type class instances
+
+scala> Some(1).map2(Some(2))(_ + _)
+val res0: Option[Int] = Some(3)
+
+scala> OptionT.fromOption[F = List](res0)
+val res1: leopards.OptionT.OptionT[List, Int] = List(Some(3))
+```
