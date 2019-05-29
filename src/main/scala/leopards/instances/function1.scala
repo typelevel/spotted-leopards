@@ -1,7 +1,7 @@
-/* Disabled for now as it causes ambiguous resoultion for things like `List(1, 2) *> List(3, 4)`
+/* Disabled for now: https://github.com/typelevel/spotted-leopards/issues/2
 package leopards
 
-implied Function1Monad[A] for Monad[[X] => Function1[A, X]] {
+implied Function1Monad[A] for Monad[[X] => A => X] {
   def (b: B) pure[B]: A => B = _ => b
   def (fb: A => B) flatMap[B, C](f: B => A => C): A => C =
     a => f(fb(a))(a)
