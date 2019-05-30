@@ -15,14 +15,18 @@ object OptionT {
     def value: F[Option[A]] = `this`
   }
 
-  implied FunctorInstance[F[_]] for Functor[[X] => OptionT[F, X]] given (F: Functor[F]) {
+  implied [F[_]] for Functor[[X] => OptionT[F, X]] given (F: Functor[F]) =
+    new OptionTFunctor[F] {}
+
+  private trait OptionTFunctor[F[_]] given (F: Functor[F]) extends Functor[[X] => OptionT[F, X]] {
     def (ota: OptionT[F, A]) map[A, B] (f: A => B): OptionT[F, B] =
       F.map(ota)(_.map(f))
   }
 
-  implied MonadInstance[F[_]] for Monad[[X] => OptionT[F, X]] given (F: Monad[F]) {
-    def (a: A) pure[A]: OptionT[F, A] = F.pure(Some(a))
-    def (ota: OptionT[F, A]) flatMap[A, B] (f: A => OptionT[F, B]): OptionT[F, B] =
-      F.flatMap(ota)(oa => oa.fold(F.pure(None))(f))
-  }
+  implied [F[_]] for Monad[[X] => OptionT[F, X]] given (F: Monad[F]) = 
+    new OptionTFunctor[F] with Monad[[X] => OptionT[F, X]] {
+      def (a: A) pure[A]: OptionT[F, A] = F.pure(Some(a))
+      def (ota: OptionT[F, A]) flatMap[A, B] (f: A => OptionT[F, B]): OptionT[F, B] =
+        F.flatMap(ota)(oa => oa.fold(F.pure(None))(f))
+    }
 }
