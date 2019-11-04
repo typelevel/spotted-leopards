@@ -19,14 +19,14 @@ object OptionT {
     new OptionTFunctor[F] {}
 
   private trait OptionTFunctor[F[_]] (given F: Functor[F]) extends Functor[[X] =>> OptionT[F, X]] {
-    def (ota: OptionT[F, A]) map[A, B] (f: A => B): OptionT[F, B] =
+    def [A, B] (ota: OptionT[F, A]) map (f: A => B): OptionT[F, B] =
       F.map(ota)(_.map(f))
   }
 
   given [F[_]] (given F: Monad[F]): Monad[[X] =>> OptionT[F, X]] =
     new OptionTFunctor[F] with Monad[[X] =>> OptionT[F, X]] {
-      def (a: A) pure[A]: OptionT[F, A] = F.pure(Some(a))
-      def (ota: OptionT[F, A]) flatMap[A, B] (f: A => OptionT[F, B]): OptionT[F, B] =
+      def [A] (a: A) pure: OptionT[F, A] = F.pure(Some(a))
+      def [A, B] (ota: OptionT[F, A]) flatMap (f: A => OptionT[F, B]): OptionT[F, B] =
         F.flatMap(ota)(oa => oa.fold(F.pure(None))(f))
     }
 }

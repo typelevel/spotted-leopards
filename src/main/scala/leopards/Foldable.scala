@@ -1,5 +1,5 @@
 package leopards
 
 trait Foldable[F[_]] {
-  def (fa: F[A]) foldLeft[A, B](b: B)(f: (B, A) => B): B
+  def [A, B] (fa: F[A]) foldLeft(b: B)(f: (B, A) => B): B
 }

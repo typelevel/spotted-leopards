@@ -4,5 +4,5 @@
 package leopards
 
 trait Semigroupal[F[_]] {
-  def (fa: F[A]) product[A, B](fb: F[B]): F[(A, B)]
+  def [A, B] (fa: F[A]) product (fb: F[B]): F[(A, B)]
 }

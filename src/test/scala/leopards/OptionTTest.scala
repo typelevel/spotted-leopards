@@ -6,15 +6,7 @@ import org.junit.Assert._
 class OptionTTest {
   @Test def fromOption(): Unit = {
     val x = OptionT.fromOption[F = List](Some(42))
-    // assertEquals(x.value, List(Some(42)))
-    /* As of 0.16.0-Rc3:
-[error] -- [E008] Member Not Found Error: /Users/mpilquist/Development/oss/spotted-leopards/src/test/scala/leopards/OptionTTest.scala:9:19
-[error] 9 |    assertEquals(x.value, List(Some(42)))
-[error]   |                 ^^^^^^^
-[error]   |                value value is not a member of leopards.OptionT[List, Int]
-[error] one error found
-[error] (Test / compileIncremental) Compilation failed
-  */
+    assertEquals(x.value, List(Some(42)))
   }
 
   @Test def map(): Unit = {
