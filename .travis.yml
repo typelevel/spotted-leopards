@@ -4,5 +4,5 @@ jdk:
   - openjdk11
 
 script:
-  - sbt clean test
+  - sbt test
 
