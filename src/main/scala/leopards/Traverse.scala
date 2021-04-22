@@ -1,7 +1,7 @@
 package leopards
 
-trait Traverse[F[_]] extends Foldable[F] {
-  def [G[_], A, B] (fa: F[A]) traverse(f: A => G[B]) (given Applicative[G]): G[F[B]]
-  def [G[_], A, B] (fa: F[G[A]]) sequence (given Applicative[G]): G[F[A]] =
-    fa.traverse(identity)
-}
+trait Traverse[F[_]] extends Functor[F], Foldable[F]:
+  extension [A](fa: F[A])
+    def traverse[G[_], B](f: A => G[B])(using G: Applicative[G]): G[F[B]]
+  extension [G[_], A](fga: F[G[A]])
+    def sequence(using Applicative[G]): G[F[A]] = fga.traverse(identity)

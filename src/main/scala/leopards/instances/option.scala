@@ -1,15 +1,10 @@
 package leopards
 
-given Monad[Option], Traverse[Option] {
-  def [A] (a: A) pure: Option[A] = Some(a)
-  def [A, B] (fa: Option[A]) flatMap(f: A => Option[B]): Option[B] =
-    fa.flatMap(f)
-  def [A, B] (fa: Option[A]) foldLeft(b: B)(f: (B, A) => B): B =
-    fa.foldLeft(b)(f)
-  def [G[_], A, B] (fa: Option[A]) traverse(f: A => G[B]) (given G: Applicative[G]): G[Option[B]] =
-    fa match {
-      case None => G.pure(None)
-      case Some(a) => f(a).map(Some(_))
-    }
-}
-
+given Monad[Option] with Traverse[Option] with
+  def pure[A](a: A) = Some(a)
+  extension[A](fa: Option[A])
+    def flatMap[B](f: A => Option[B]) = fa.flatMap(f)
+    def traverse[G[_], B](f: A => G[B])(using G: Applicative[G]): G[Option[B]] =
+      fa.fold(G.pure(None: Option[B]))(a => f(a).map(Some(_)))
+    def foldLeft[B](b: B)(f: (B, A) => B): B = fa.fold(b)(a => f(b, a))
+    def foldRight[B](b: B)(f: (A, B) => B): B = fa.fold(b)(a => f(a, b))

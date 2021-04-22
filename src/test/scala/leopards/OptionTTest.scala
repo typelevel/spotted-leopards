@@ -1,16 +1,15 @@
 package leopards
 
-import org.junit.Test
-import org.junit.Assert._
+import munit.FunSuite
 
-class OptionTTest {
-  @Test def fromOption(): Unit = {
-    val x = OptionT.fromOption[F = List](Some(42))
+class OptionTTest extends FunSuite:
+  test("fromOption") {
+    val x = OptionT.fromOption[List, Int](Some(42))
     assertEquals(x.value, List(Some(42)))
   }
 
-  @Test def map(): Unit = {
-    val x = OptionT.fromOption[F = List](Some(42))
+  test("map") {
+    val x = OptionT.fromOption[List, Int](Some(42))
 // https://github.com/typelevel/spotted-leopards/issues/1
 //     x.map(_ + 1)
 //     // Fails to compile with:
@@ -25,4 +24,3 @@ class OptionTTest {
 //     // [error]    |    ).map()
 //     assertEquals(x.value, List(Some(43)))
   }
-}

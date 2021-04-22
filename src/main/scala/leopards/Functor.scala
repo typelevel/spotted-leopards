@@ -1,9 +1,9 @@
 package leopards
 
-trait Functor[F[_]] {
-  def [A, B] (fa: F[A]) map(f: A => B): F[B]
-  def [A, B] (fa: F[A]) as(b: B): F[B] =
-    fa.map(_ => b)
-  def [A] (fa: F[A]) void: F[Unit] =
-    fa.as(())
-}
+trait Functor[F[_]]:
+  extension [A](fa: F[A])
+    def map[B](f: A => B): F[B]
+    def as[B](b: B): F[B] = map(_ => b)
+    def void: F[Unit] = as(())
+  def lift[A, B](f: A => B): F[A] => F[B] =
+    _.map(f)

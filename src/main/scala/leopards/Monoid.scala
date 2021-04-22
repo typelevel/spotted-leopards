@@ -1,5 +1,4 @@
 package leopards
 
-trait Monoid[A] extends Semigroup[A] {
+trait Monoid[A] extends Semigroup[A]:
   def empty: A
-}

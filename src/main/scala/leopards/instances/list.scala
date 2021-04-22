@@ -1,11 +1,10 @@
 package leopards
 
-given Monad[List], Traverse[List] {
-  def [A] (a: A) pure: List[A] = List(a)
-  def [A, B] (fa: List[A]) flatMap(f: A => List[B]): List[B] =
-    fa.flatMap(f)
-  def [A, B] (fa: List[A]) foldLeft(b: B)(f: (B, A) => B): B =
-    fa.foldLeft(b)(f)
-  def [G[_], A, B] (fa: List[A]) traverse(f: A => G[B]) (given G: Applicative[G]): G[List[B]] =
-    fa.foldRight(G.pure(List.empty[B]))((a, acc) => f(a).map2(acc)(_ :: _))
-}
+given Monad[List] with Traverse[List] with
+  def pure[A](a: A) = List(a)
+  extension[A](fa: List[A])
+    def flatMap[B](f: A => List[B]) = fa.flatMap(f)
+    def traverse[G[_], B](f: A => G[B])(using G: Applicative[G]): G[List[B]] =
+      fa.foldRight(G.pure(Nil: List[B]))((a, acc) => f(a).map2(acc, _ :: _))
+    def foldLeft[B](b: B)(f: (B, A) => B): B = fa.foldLeft(b)(f)
+    def foldRight[B](b: B)(f: (A, B) => B): B = fa.foldRight(b)(f)

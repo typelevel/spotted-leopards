@@ -1,9 +1,7 @@
-/* Disabled for now: https://github.com/typelevel/spotted-leopards/issues/2
-package leopards
+// package leopards
 
-delegate [A] for Monad[[X] =>> A => X] {
-  def (b: B) pure[B]: A => B = _ => b
-  def (fb: A => B) flatMap[B, C](f: B => A => C): A => C =
-    a => f(fb(a))(a)
-}
-*/
+// given [X]: Monad[[A] =>> X => A] with
+//   def pure[A](a: A): X => A = _ => a
+//   extension [A](fa: X => A)
+//     def flatMap[B](f: A => X => B) =
+//       x => f(fa(x))(x)
