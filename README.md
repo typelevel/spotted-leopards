@@ -14,13 +14,11 @@ In short, this project is an *experiment only* and will not in any way become a 
 To get started, launch `sbt console` and run the following:
 
 ```scala
-scala> import leopards._ // Import various types like Monad and OptionT
+scala> import leopards.{*, given} // Import various types like Monad and OptionT and type class instances
 
-scala> import implied leopards._ // Import type class instances
-
-scala> Some(1).map2(Some(2))(_ + _)
+scala> Some(1).map2(Some(2), _ + _)
 val res0: Option[Int] = Some(3)
 
-scala> OptionT.fromOption[F = List](res0)
-val res1: leopards.OptionT.OptionT[List, Int] = List(Some(3))
+scala> OptionT.fromOption[List, Int](res0)
+val res1: leopards.OptionT[List, Int] = List(Some(3))
 ```
