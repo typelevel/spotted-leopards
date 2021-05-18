@@ -11,8 +11,12 @@ object OptionT:
   def liftF[F[_], A](fa: F[A])(using Functor[F]): OptionT[F, A] =
     apply(fa.map(Some(_)))
 
+  def liftK[F[_]](using Functor[F]): F ~> ([X] =>> OptionT[F, X]) = 
+    [X] => liftF(_: F[X])
+
   extension [F[_], A](fa: OptionT[F, A])
     def value: F[Option[A]] = fa
+    def mapK[G[_]](fk: F ~> G): OptionT[G, A] = fk(fa.value)
 
   given [F[_]](using F: Functor[F]): Functor[[X] =>> OptionT[F, X]] =
     new OptionTFunctor[F] {}
