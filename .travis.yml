@@ -1,8 +1,0 @@
-language: scala
-jdk:
-  - openjdk8
-  - openjdk11
-
-script:
-  - sbt test
-
