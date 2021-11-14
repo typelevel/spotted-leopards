@@ -1,6 +1,6 @@
 ThisBuild / organization := "org.typelevel"
 
-ThisBuild / scalaVersion := "3.1.0"
+ThisBuild / scalaVersion := "3.1.1-RC1"
 
 lazy val root = project
   .in(file("."))
