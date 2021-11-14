@@ -3,7 +3,6 @@ package leopards.testsyntax
 import munit.FunSuite
 
 import leopards.{*, given}
-import leopards.syntax.*
 
 class SyntaxExample extends FunSuite:
 
@@ -13,8 +12,7 @@ class SyntaxExample extends FunSuite:
   }
 
   test("f poly flatMap") {
-    // for the flatMap we need the leopards.{*, given} import
-    // for the value.pure[F] we need the leopards.syntax.* import
+    // for the flatMap and value.pure[F] we need the leopards.given import
     def fPolyFlatMap[F[_]: Monad](value: Int): F[Int] = 
       for {
         v <- value.pure[F]
