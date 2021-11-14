@@ -17,3 +17,7 @@ class FirstExample extends FunSuite:
     assertEquals(List(Option(1), Option(2)).sequence, Some(List(1, 2)))
     assertEquals(List(Option(1), None).sequence, None)
   }
+
+  test("mapN") {
+    assertEquals(summon[Applicative[Option]].mapN(Option(1), Option(2), Option(3))(_ + _ + _), Option(6))
+  }
