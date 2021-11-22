@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package leopards.testsyntax
+package leopardstest
 
 import munit.FunSuite
 

@@ -16,7 +16,7 @@
 
 package leopards
 
-given Monad[List] with Traverse[List] with
+given stdListInstances: Monad[List] with Traverse[List] with
   def pure[A](a: A) = List(a)
   extension[A](fa: List[A])
     def flatMap[B](f: A => List[B]) = fa.flatMap(f)

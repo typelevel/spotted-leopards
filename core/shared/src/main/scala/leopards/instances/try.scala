@@ -19,7 +19,7 @@ package leopards
 import scala.util.{Try, Failure, Success}
 import scala.util.control.NonFatal
 
-given ApplicativeError[Try, Throwable] with
+given stdTryInstances: ApplicativeError[Try, Throwable] with
   override def pure[A](a: A): Try[A] = Try(a)
   override  def raiseError[A](e: Throwable): Try[A] = Failure(e)
   

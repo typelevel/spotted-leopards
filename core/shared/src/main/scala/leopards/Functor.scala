@@ -23,3 +23,9 @@ trait Functor[F[_]]:
     def void: F[Unit] = as(())
   def lift[A, B](f: A => B): F[A] => F[B] =
     _.map(f)
+
+object Functor:
+  export leopards.stdListInstances
+  export leopards.stdOptionInstances
+  export leopards.stdTryInstances
+  export leopards.stdFunction1Instances

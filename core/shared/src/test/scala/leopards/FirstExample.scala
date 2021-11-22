@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-package leopards
+package leopardstest
 
 import munit.FunSuite
+
+import leopards.{*, given}
 
 class FirstExample extends FunSuite:
   test("listProductR") {
@@ -36,4 +38,9 @@ class FirstExample extends FunSuite:
 
   test("mapN") {
     assertEquals(summon[Applicative[Option]].mapN(Option(1), Option(2), Option(3))(_ + _ + _), Option(6))
+  }
+
+  test("coherence") {
+    def increment[F[_]: Monad: Traverse](fa: F[Int]): F[Int] = fa.map(_ + 1)
+    assertEquals(increment(List(1, 2, 3)), List(2, 3, 4))
   }

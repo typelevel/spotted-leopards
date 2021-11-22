@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package leopards
+package leopardstest
 
 import munit.FunSuite
+import leopards.{~>, OptionT}
 
 class OptionTTest extends FunSuite:
   test("fromOption") {

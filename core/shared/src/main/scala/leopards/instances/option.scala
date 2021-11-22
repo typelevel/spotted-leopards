@@ -16,7 +16,7 @@
 
 package leopards
 
-given Monad[Option] with Traverse[Option] with
+given stdOptionInstances: Monad[Option] with Traverse[Option] with
   def pure[A](a: A) = Some(a)
   extension[A](fa: Option[A])
     def flatMap[B](f: A => Option[B]) = fa.flatMap(f)

@@ -22,3 +22,9 @@ trait Foldable[F[_]]:
     def foldRight[B](b: B)(f: (A, B) => B): B
     def foldMap[B](f: A => B)(using B: Monoid[B]): B =
       foldRight(B.empty)((a, b) => f(a) |+| b)
+
+object Foldable:
+  export leopards.stdListInstances
+  export leopards.stdOptionInstances
+  export leopards.stdTryInstances
+  export leopards.stdFunction1Instances
