@@ -23,15 +23,16 @@ trait Apply[F[_]] extends Functor[F], Semigroupal[F]:
     @alpha("ap")
     def <*> (fa: F[A]): F[B]
 
-  def mapN[T <: NonEmptyTuple : Tuple.IsMappedBy[F], B](t: T)(f: Tuple.InverseMap[T, F] => B): F[B] =
-    tupled(t).map(f)
+  // note: we should be able to take `Tuple.IsMappedBy[F]` constraint here but https://github.com/lampepfl/dotty/issues/14165
+  extension [T <: NonEmptyTuple](t: T)
+    def mapN[B](using Tuple.IsMappedBy[F][T])(f: Tuple.InverseMap[T, F] => B): F[B] =
+      t.tupled.map(f)
 
-  def tupled[T <: NonEmptyTuple : Tuple.IsMappedBy[F], B](t: T): F[Tuple.InverseMap[T, F]] =
-    def loop[X <: Tuple](x: X): F[Tuple] = x match
-      case hd *: EmptyTuple => hd.asInstanceOf[F[Any]].map(_ *: EmptyTuple)
-      case hd *: tl => hd.asInstanceOf[F[Any]].map2(loop(tl))(_ *: _)
-      case EmptyTuple => sys.error("impossible")
-    loop(t).asInstanceOf[F[Tuple.InverseMap[T, F]]]
+    def tupled(using Tuple.IsMappedBy[F][T]): F[Tuple.InverseMap[T, F]] =
+      def loop[X <: NonEmptyTuple](x: X): F[Tuple] = x match
+        case hd *: EmptyTuple => hd.asInstanceOf[F[Any]].map(_ *: EmptyTuple)
+        case hd *: (tl: NonEmptyTuple) => hd.asInstanceOf[F[Any]].map2(loop(tl))(_ *: _)
+      loop(t).asInstanceOf[F[Tuple.InverseMap[T, F]]]
 
   extension [A](fa: F[A])
     def map2[B, Z](fb: F[B])(f: (A, B) => Z): F[Z] =

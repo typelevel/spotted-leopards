@@ -37,7 +37,7 @@ class FirstExample extends FunSuite:
   }
 
   test("mapN") {
-    assertEquals(summon[Applicative[Option]].mapN(Option(1), Option(2), Option(3))(_ + _ + _), Option(6))
+    assertEquals((Option(1), Option(2), Option(3)).mapN(_ + _ + _), Option(6))
   }
 
   test("coherence") {
