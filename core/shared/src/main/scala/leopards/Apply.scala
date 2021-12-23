@@ -32,7 +32,7 @@ trait Apply[F[_]] extends Functor[F], Semigroupal[F]:
       def loop[X <: NonEmptyTuple](x: X): F[NonEmptyTuple] = x match
         case hd *: EmptyTuple => hd.asInstanceOf[F[Any]].map(_ *: EmptyTuple)
         case hd *: (tl: NonEmptyTuple) => hd.asInstanceOf[F[Any]].map2(loop(tl))(_ *: _)
-      loop(t).asInstanceOf
+      loop(t).asInstanceOf[F[Tuple.InverseMap[T, F]]]
 
   extension [A](fa: F[A])
     def map2[B, Z](fb: F[B])(f: (A, B) => Z): F[Z] =
