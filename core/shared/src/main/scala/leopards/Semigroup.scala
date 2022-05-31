@@ -16,14 +16,15 @@
 
 package leopards
 
-import scala.annotation.alpha
+import scala.annotation.targetName
 
 trait Semigroup[A]:
   extension (x: A)
-    @alpha("combine")
+    @targetName("combine")
     def |+| (y: A): A
 
 object Semigroup:
   given Semigroup[Int] with
     extension (x: Int)
+      @targetName("combine")
       def |+| (y: Int) = x + y

@@ -16,11 +16,11 @@
 
 package leopards
 
-import scala.annotation.alpha
+import scala.annotation.targetName
 
 trait Apply[F[_]] extends Functor[F], Semigroupal[F]:
   extension [A, B](ff: F[A => B])
-    @alpha("ap")
+    @targetName("ap")
     def <*> (fa: F[A]): F[B]
 
   // note: we should be able to take `Tuple.IsMappedBy[F]` constraint here but https://github.com/lampepfl/dotty/issues/14165
@@ -41,8 +41,8 @@ trait Apply[F[_]] extends Functor[F], Semigroupal[F]:
     override def product[B](fb: F[B]): F[(A, B)] =
       fa.map(a => (b: B) => (a, b)) <*> fb
 
-    @alpha("productL") def <*[B](fb: F[B]): F[A] =
+    @targetName("productL") def <*[B](fb: F[B]): F[A] =
       fa.map2(fb)((a, _) => a)
 
-    @alpha("productR") def *>[B](fb: F[B]): F[B] =
+    @targetName("productR") def *>[B](fb: F[B]): F[B] =
       fa.map2(fb)((_, b) => b)

@@ -16,7 +16,8 @@
 
 package leopards
 
-import scala.util.{Try, Failure, Success}
+import scala.annotation.targetName
+import scala.util.{Failure, Success, Try}
 import scala.util.control.NonFatal
 
 given stdTryInstances: ApplicativeError[Try, Throwable] with
@@ -28,5 +29,6 @@ given stdTryInstances: ApplicativeError[Try, Throwable] with
     override def handleError(f: Throwable => A): Try[A] = fa.recover[A] { case e => f(e) }
   
   extension [A, B](ff: Try[A => B])
+    @targetName("ap")
     override def <*>(fa: Try[A]): Try[B] =
       ff.flatMap(f => fa.map(f))

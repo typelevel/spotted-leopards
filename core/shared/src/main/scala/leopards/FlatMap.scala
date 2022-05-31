@@ -16,13 +16,14 @@
 
 package leopards
 
-import scala.annotation.alpha
+import scala.annotation.targetName
 
 trait FlatMap[F[_]] extends Apply[F]:
   extension [A](fa: F[A])
     def flatMap[B](f: A => F[B]): F[B]
 
   extension [A, B](ff: F[A => B])
+    @targetName("ap")
     override def <*>(fa: F[A]): F[B] =
       ff.flatMap(f => fa.map(f))
 

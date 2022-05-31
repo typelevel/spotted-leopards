@@ -21,7 +21,7 @@ ThisBuild / licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses
 ThisBuild / publishGithubUser := "mpilquist"
 ThisBuild / publishFullName := "Michael Pilquist"
 
-ThisBuild / scalaVersion := "3.1.1-RC1"
+ThisBuild / scalaVersion := "3.1.2"
 
 lazy val root = project
   .in(file("."))
