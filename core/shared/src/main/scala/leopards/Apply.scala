@@ -33,16 +33,16 @@ trait Apply[F[_]] extends Functor[F], Semigroupal[F]:
   // A helper for pattern-matching, which lets us unify type variables in a `def` with
   // the variables in pattern-match cases
   private case class IsMap[T <: Tuple](value: Tuple.Map[T, F])
-  
+
   // We can't propagate the `T <: NonEmptyTuple` constraint here because the `IsMappedBy`
   // implicit doesn't preserve it
   private inline def tupledGeneric[T <: Tuple](tuple: Tuple.Map[T, F]): F[T] =
     inline IsMap(tuple) match
       case t: IsMap[h *: EmptyTuple] => t.value.head.map(_ *: EmptyTuple)
-      case t: IsMap[h *: t] => 
-        val head =  t.value.head
+      case t: IsMap[h *: t] =>
+        val head = t.value.head
         val tail = tupledGeneric(t.value.tail)
-        head.map2(tail)(_ *: _) 
+        head.map2(tail)(_ *: _)
 
   extension [A](fa: F[A])
     def map2[B, Z](fb: F[B])(f: (A, B) => Z): F[Z] =
