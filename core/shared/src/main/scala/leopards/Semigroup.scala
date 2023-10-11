@@ -21,10 +21,10 @@ import scala.annotation.alpha
 trait Semigroup[A]:
   extension (x: A)
     @alpha("combine")
-    def |+| (y: A): A
+    def |+|(y: A): A
 
 object Semigroup:
   given Semigroup[Int] with
     extension (x: Int)
       @alpha("combine")
-      def |+| (y: Int) = x + y
+      def |+|(y: Int) = x + y

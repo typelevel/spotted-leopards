@@ -27,7 +27,7 @@ object OptionT:
   def liftF[F[_], A](fa: F[A])(using Functor[F]): OptionT[F, A] =
     apply(fa.map(Some(_)))
 
-  def liftK[F[_]](using Functor[F]): F ~> ([X] =>> OptionT[F, X]) = 
+  def liftK[F[_]](using Functor[F]): F ~> ([X] =>> OptionT[F, X]) =
     [X] => liftF(_: F[X])
 
   extension [F[_], A](fa: OptionT[F, A])
@@ -38,8 +38,7 @@ object OptionT:
     new OptionTFunctor[F] {}
 
   private trait OptionTFunctor[F[_]](using F: Functor[F]) extends Functor[[X] =>> OptionT[F, X]]:
-    extension [A](ota: OptionT[F, A])
-      def map[B](f: A => B) = F.map(ota)(_.map(f))
+    extension [A](ota: OptionT[F, A]) def map[B](f: A => B) = F.map(ota)(_.map(f))
 
   given [F[_]](using F: Monad[F]): Monad[[X] =>> OptionT[F, X]] =
     new OptionTFunctor[F] with Monad[[X] =>> OptionT[F, X]]:

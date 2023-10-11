@@ -18,7 +18,7 @@ package leopards
 
 given stdOptionInstances: Monad[Option] with Traverse[Option] with
   def pure[A](a: A) = Some(a)
-  extension[A](fa: Option[A])
+  extension [A](fa: Option[A])
     def flatMap[B](f: A => Option[B]) = fa.flatMap(f)
     def traverse[G[_], B](f: A => G[B])(using G: Applicative[G]): G[Option[B]] =
       fa.fold(G.pure(None: Option[B]))(a => f(a).map(Some(_)))
