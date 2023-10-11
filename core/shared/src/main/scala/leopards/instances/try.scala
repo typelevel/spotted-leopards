@@ -16,7 +16,7 @@
 
 package leopards
 
-import scala.util.{Try, Failure, Success}
+import scala.util.{Try, Failure}
 
 given stdTryInstances: ApplicativeError[Try, Throwable] with
   override def pure[A](a: A): Try[A] = Try(a)
