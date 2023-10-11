@@ -26,4 +26,5 @@ trait Semigroup[A]:
 object Semigroup:
   given Semigroup[Int] with
     extension (x: Int)
+      @alpha("combine")
       def |+| (y: Int) = x + y
