@@ -17,5 +17,4 @@
 package leopards
 
 trait Semigroupal[F[_]]:
-  extension [A] (fa: F[A])
-    def product[B](fb: F[B]): F[(A, B)]
+  extension [A](fa: F[A]) def product[B](fb: F[B]): F[(A, B)]
