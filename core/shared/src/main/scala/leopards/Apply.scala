@@ -23,7 +23,6 @@ trait Apply[F[_]] extends Functor[F], Semigroupal[F]:
     @alpha("ap")
     def <*>(fa: F[A]): F[B]
 
-  // note: we should be able to take `Tuple.IsMappedBy[F]` constraint here but https://github.com/lampepfl/dotty/issues/14165
   extension [T <: NonEmptyTuple](tuple: T)(using toMap: Tuple.IsMappedBy[F][T])
     inline def mapN[B](f: Tuple.InverseMap[T, F] => B): F[B] =
       tuple.tupled.map(f)
