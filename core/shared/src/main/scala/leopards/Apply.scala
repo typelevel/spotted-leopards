@@ -24,15 +24,26 @@ trait Apply[F[_]] extends Functor[F], Semigroupal[F]:
     def <*>(fa: F[A]): F[B]
 
   // note: we should be able to take `Tuple.IsMappedBy[F]` constraint here but https://github.com/lampepfl/dotty/issues/14165
-  extension [T <: NonEmptyTuple](t: T)
-    def mapN[B](using Tuple.IsMappedBy[F][T])(f: Tuple.InverseMap[T, F] => B): F[B] =
-      t.tupled.map(f)
+  extension [T <: NonEmptyTuple](tuple: T)(using toMap: Tuple.IsMappedBy[F][T])
+    inline def mapN[B](f: Tuple.InverseMap[T, F] => B): F[B] =
+      tuple.tupled.map(f)
 
-    def tupled(using Tuple.IsMappedBy[F][T]): F[Tuple.InverseMap[T, F]] =
-      def loop[X <: NonEmptyTuple](x: X): F[NonEmptyTuple] = x match
-        case hd *: EmptyTuple          => hd.asInstanceOf[F[Any]].map(_ *: EmptyTuple)
-        case hd *: (tl: NonEmptyTuple) => hd.asInstanceOf[F[Any]].map2(loop(tl))(_ *: _)
-      loop(t).asInstanceOf[F[Tuple.InverseMap[T, F]]]
+    inline def tupled: F[Tuple.InverseMap[T, F]] =
+      tupledGeneric(toMap(tuple))
+
+  // A helper for pattern-matching, which lets us unify type variables in a `def` with
+  // the variables in pattern-match cases
+  private case class IsMap[T <: Tuple](value: Tuple.Map[T, F])
+  
+  // We can't propagate the `T <: NonEmptyTuple` constraint here because the `IsMappedBy`
+  // implicit doesn't preserve it
+  private inline def tupledGeneric[T <: Tuple](tuple: Tuple.Map[T, F]): F[T] =
+    inline IsMap(tuple) match
+      case t: IsMap[h *: EmptyTuple] => t.value.head.map(_ *: EmptyTuple)
+      case t: IsMap[h *: t] => 
+        val head =  t.value.head
+        val tail = tupledGeneric(t.value.tail)
+        head.map2(tail)(_ *: _) 
 
   extension [A](fa: F[A])
     def map2[B, Z](fb: F[B])(f: (A, B) => Z): F[Z] =
