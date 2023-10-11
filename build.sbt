@@ -9,7 +9,10 @@ ThisBuild / homepage := Some(url("https://github.com/typelevel/spotted-leopards"
 ThisBuild / startYear := Some(2019)
 
 ThisBuild / scmInfo := Some(
-  ScmInfo(url("https://github.com/typelevel/spotted-leopards"), "git@github.com:typelevel/spotted-leopards.git")
+  ScmInfo(
+    url("https://github.com/typelevel/spotted-leopards"),
+    "git@github.com:typelevel/spotted-leopards.git"
+  )
 )
 
 ThisBuild / licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0"))
@@ -17,7 +20,7 @@ ThisBuild / licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses
 ThisBuild / developers ++= List(
   tlGitHubDev("mpilquist", "Michael Pilquist")
 )
- 
+
 ThisBuild / scalaVersion := "3.3.1"
 
 lazy val root = tlCrossRootProject
