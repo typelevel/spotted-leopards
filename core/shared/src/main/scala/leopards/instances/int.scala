@@ -16,11 +16,6 @@
 
 package leopards
 
-trait Semigroup[A]:
-  def combine(x: A, y: A): A
-  extension (x: A) inline def |+|(y: A): A = combine(x, y)
-
-object Semigroup:
-  export leopards.intMonoid
-  export leopards.stdListMonoid
-  export leopards.stdOptionMonoid
+given intMonoid: Monoid[Int] with
+  def combine(x: Int, y: Int) = x + y
+  def empty = 0

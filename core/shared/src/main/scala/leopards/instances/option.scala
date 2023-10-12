@@ -24,3 +24,7 @@ given stdOptionInstances: Monad[Option] with Traverse[Option] with
       fa.fold(G.pure(None: Option[B]))(a => f(a).map(Some(_)))
     def foldLeft[B](b: B)(f: (B, A) => B): B = fa.fold(b)(a => f(b, a))
     def foldRight[B](b: B)(f: (A, B) => B): B = fa.fold(b)(a => f(a, b))
+
+given stdOptionMonoid[A: Semigroup]: Monoid[Option[A]] with
+  def empty = None
+  def combine(x: Option[A], y: Option[A]) = x.flatMap(xx => y.map(yy => xx |+| yy))

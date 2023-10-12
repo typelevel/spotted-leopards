@@ -26,6 +26,5 @@ given stdTryInstances: ApplicativeError[Try, Throwable] with
     override def map[B](f: A => B): Try[B] = fa.map(f)
     override def handleError(f: Throwable => A): Try[A] = fa.recover[A] { case e => f(e) }
 
-  extension [A, B](ff: Try[A => B])
-    override def <*>(fa: Try[A]): Try[B] =
-      ff.flatMap(f => fa.map(f))
+  def ap[A, B](ff: Try[A => B], fa: Try[A]): Try[B] =
+    ff.flatMap(f => fa.map(f))

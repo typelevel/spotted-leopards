@@ -16,12 +16,12 @@
 
 package leopards
 
-import scala.annotation.alpha
+import scala.annotation.targetName
 
 trait Apply[F[_]] extends Functor[F], Semigroupal[F]:
-  extension [A, B](ff: F[A => B])
-    @alpha("ap")
-    def <*>(fa: F[A]): F[B]
+  def ap[A, B](ff: F[A => B], fa: F[A]): F[B]
+
+  extension [A, B](ff: F[A => B]) inline def <*>(fa: F[A]): F[B] = ap(ff, fa)
 
   extension [T <: NonEmptyTuple](tuple: T)(using toMap: Tuple.IsMappedBy[F][T])
     inline def mapN[B](f: Tuple.InverseMap[T, F] => B): F[B] =
@@ -51,8 +51,8 @@ trait Apply[F[_]] extends Functor[F], Semigroupal[F]:
     override def product[B](fb: F[B]): F[(A, B)] =
       fa.map(a => (b: B) => (a, b)) <*> fb
 
-    @alpha("productL") def <*[B](fb: F[B]): F[A] =
+    @targetName("productL") def <*[B](fb: F[B]): F[A] =
       fa.map2(fb)((a, _) => a)
 
-    @alpha("productR") def *>[B](fb: F[B]): F[B] =
+    @targetName("productR") def *>[B](fb: F[B]): F[B] =
       fa.map2(fb)((_, b) => b)
