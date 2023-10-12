@@ -24,3 +24,7 @@ given stdListInstances: Monad[List] with Traverse[List] with
       fa.foldRight(G.pure(Nil: List[B]))((a, acc) => f(a).map2(acc)(_ :: _))
     def foldLeft[B](b: B)(f: (B, A) => B): B = fa.foldLeft(b)(f)
     def foldRight[B](b: B)(f: (A, B) => B): B = fa.foldRight(b)(f)
+
+given stdListMonoid[A]: Monoid[List[A]] with
+  def empty = Nil
+  def combine(x: List[A], y: List[A]) = x ++ y
