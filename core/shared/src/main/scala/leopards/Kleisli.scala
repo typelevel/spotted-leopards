@@ -18,7 +18,6 @@ package leopards
 
 opaque type Kleisli[F[_], A, B] = A => F[B]
 
-
 object Kleisli:
   def apply[F[_], A, B](f: A => F[B]): Kleisli[F, A, B] = f
 
@@ -29,4 +28,3 @@ object Kleisli:
     extension [B](k: Kleisli[F, A, B])
       def flatMap[C](f: B => Kleisli[F, A, C]) =
         a => k(a).flatMap(b => f(b)(a))
-
