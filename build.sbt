@@ -1,6 +1,6 @@
 import sbtcrossproject.CrossPlugin.autoImport.{CrossType, crossProject}
 
-ThisBuild / tlBaseVersion := "0.1"
+ThisBuild / tlBaseVersion := "0.2"
 
 ThisBuild / organization := "org.typelevel"
 ThisBuild / organizationName := "Typelevel"
