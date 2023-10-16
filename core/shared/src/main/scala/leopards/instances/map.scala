@@ -16,12 +16,9 @@
 
 package leopards
 
-trait Semigroup[A]:
-  def combine(x: A, y: A): A
-  extension (x: A) inline def |+|(y: A): A = combine(x, y)
-
-object Semigroup:
-  export leopards.intMonoid
-  export leopards.stdListMonoid
-  export leopards.stdOptionMonoid
-  export leopards.mapMergeMonoid
+given mapMergeMonoid[A, B: Semigroup]: Monoid[Map[A, B]] with
+  val empty = Map.empty
+  def combine(x: Map[A, B], y: Map[A, B]) =
+    y.foldLeft(x):
+      case (acc, (k, v)) =>
+        acc.updatedWith(k)(_ |+| Some(v))

@@ -27,4 +27,10 @@ given stdOptionInstances: Monad[Option] with Traverse[Option] with
 
 given stdOptionMonoid[A: Semigroup]: Monoid[Option[A]] with
   def empty = None
-  def combine(x: Option[A], y: Option[A]) = x.flatMap(xx => y.map(yy => xx |+| yy))
+  def combine(x: Option[A], y: Option[A]) =
+    x match
+      case None => y
+      case Some(xx) =>
+        y match
+          case None     => x
+          case Some(yy) => Some(xx |+| yy)

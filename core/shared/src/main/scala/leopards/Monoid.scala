@@ -18,3 +18,11 @@ package leopards
 
 trait Monoid[A] extends Semigroup[A]:
   def empty: A
+
+  extension (as: IterableOnce[A])
+    def combineAll: A =
+      as.foldMap(identity)(using this)
+
+extension [A](as: IterableOnce[A])
+  def foldMap[B](f: A => B)(using m: Monoid[B]): B =
+    as.iterator.foldLeft(m.empty)((acc, a) => acc |+| f(a))

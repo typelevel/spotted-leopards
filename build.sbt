@@ -29,5 +29,7 @@ lazy val root = tlCrossRootProject
 lazy val core = crossProject(JVMPlatform, JSPlatform)
   .settings(
     name := "spotted-leopards",
-    libraryDependencies += "org.scalameta" %%% "munit-scalacheck" % "0.7.29"
+    libraryDependencies += "org.scalameta" %%% "munit-scalacheck" % "0.7.29",
+    Compile / console / scalacOptions := (Compile / console / scalacOptions).value
+      .filterNot(_.startsWith("-Wunused"))
   )
