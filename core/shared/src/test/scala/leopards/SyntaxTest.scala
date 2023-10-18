@@ -23,7 +23,7 @@ import leopards.{*, given}
 class SyntaxExample extends FunSuite:
 
   test("f poly summon ") {
-    def fPolySummon[F[_]: Monad](value: Int): F[Int] = Monad[F].pure(42)
+    def fPolySummon[F[_]: Monad](value: Int): F[Int] = 42.pure[F]
     assertEquals(fPolySummon[Option](42), Some(42))
   }
 

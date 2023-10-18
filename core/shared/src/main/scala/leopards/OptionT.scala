@@ -19,22 +19,22 @@ package leopards
 opaque type OptionT[F[_], A] = F[Option[A]]
 
 object OptionT:
-  def apply[F[_], A](o: F[Option[A]]): OptionT[F, A] = o
+  inline def apply[F[_], A](o: F[Option[A]]): OptionT[F, A] = o
 
-  def fromOption[F[_], A](oa: Option[A])(using F: Applicative[F]): OptionT[F, A] =
+  inline def fromOption[F[_], A](oa: Option[A])(using F: Applicative[F]): OptionT[F, A] =
     apply(F.pure(oa))
 
-  def liftF[F[_], A](fa: F[A])(using Functor[F]): OptionT[F, A] =
+  inline def liftF[F[_], A](fa: F[A])(using Functor[F]): OptionT[F, A] =
     apply(fa.map(Some(_)))
 
-  def liftK[F[_]](using Functor[F]): [X] => F[X] => OptionT[F, X] =
+  inline def liftK[F[_]](using Functor[F]): [X] => F[X] => OptionT[F, X] =
     [X] => liftF(_: F[X])
 
   extension [F[_], A](fa: OptionT[F, A])
-    def value: F[Option[A]] = fa
-    def mapK[G[_]](fk: [X] => F[X] => G[X]): OptionT[G, A] = fk(fa.value)
+    inline def value: F[Option[A]] = fa
+    inline def mapK[G[_]](fk: [X] => F[X] => G[X]): OptionT[G, A] = fk(fa.value)
 
-  given [F[_]](using F: Functor[F]): Functor[[X] =>> OptionT[F, X]] =
+  given [F[_]: Functor]: Functor[[X] =>> OptionT[F, X]] =
     new OptionTFunctor[F] {}
 
   private trait OptionTFunctor[F[_]](using F: Functor[F]) extends Functor[[X] =>> OptionT[F, X]]:
